@@ -7,6 +7,7 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class QuestionController extends Controller
 {
@@ -17,7 +18,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        return QuestionResource::collection( Question::latest()->get());
+        return QuestionResource::collection(Question::latest()->get());
     }
 
     /**
@@ -40,7 +41,7 @@ class QuestionController extends Controller
     {
         //auth()->user()->question()->create($request->all());
         Question::create($request->all());
-        return \response('created', Response::HTTP_CREATED);
+        return \response('created', ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -74,7 +75,8 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        //
+        $question->update($request->all());
+        return response('updated', ResponseAlias::HTTP_ACCEPTED);
     }
 
     /**
@@ -86,6 +88,6 @@ class QuestionController extends Controller
     public function destroy(Question $question): Response
     {
         $question->delete();
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 }
