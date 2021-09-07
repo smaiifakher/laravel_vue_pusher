@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReplyResource;
+use App\Models\Question;
 use App\Models\Reply;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+
 
 class ReplyController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Question $question)
     {
-        //
+        return ReplyResource::collection($question->replies);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -30,30 +37,31 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(Question $question, Request $request)
     {
-        //
+        $reply = $question->replies()->create($request->all());
+        return response(['reply' => $reply], ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @param Reply $reply
+     * @return ReplyResource
      */
-    public function show(Reply $reply)
+    public function show(Question $question, Reply $reply)
     {
-        //
+        return new ReplyResource($reply);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @param Reply $reply
+     * @return Response
      */
     public function edit(Reply $reply)
     {
@@ -63,23 +71,25 @@ class ReplyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param Reply $reply
+     * @return Response
      */
     public function update(Request $request, Reply $reply)
     {
-        //
+        $reply->update($request->all());
+        return response('updated', ResponseAlias::HTTP_ACCEPTED);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @param Reply $reply
+     * @return Response
      */
-    public function destroy(Reply $reply)
+    public function destroy(Question $question, Reply $reply)
     {
-        //
+        $reply->delete();
+        return response(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 }
