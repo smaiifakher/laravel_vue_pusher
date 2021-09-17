@@ -35,4 +35,4 @@ const app = new Vue({
     el: '#app',
     vuetify,
     router
-});
+}).$mount('#app');
