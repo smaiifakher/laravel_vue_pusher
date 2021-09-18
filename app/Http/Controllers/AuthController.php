@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SignupRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -85,7 +86,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function signup(Request $request)
+    public function signup(SignupRequest $request)
     {
         //$request->password=bcrypt(re)
         User::create($request->all());

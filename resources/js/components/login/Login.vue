@@ -20,8 +20,16 @@
             <v-btn
                 color="green" type="submit"
             >
-                login
+                Login
             </v-btn>
+            <router-link to="/signup">
+                <v-btn
+                    color="blue"
+                >
+                    Sign Up
+                </v-btn>
+            </router-link>
+
 
         </v-form>
 
@@ -45,8 +53,16 @@ export default {
     methods: {
         login() {
             User.login(this.form)
+            //this.$router.push('forum')
+
         }
-    }
+    },
+    created() {
+        if (User.loggedIn()) {
+            this.$router.push('forum')
+        }
+    },
+
 
 }
 </script>

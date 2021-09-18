@@ -15,7 +15,10 @@ import Vuetify from "vuetify";
 import User from "./Helpers/User";
 
 Vue.use(Vuetify)
+//User.loggedOut()
+console.log(User.loggedIn(), User.name())
 
+window.EventBus = new Vue();
 
 /**
  * The following block of code may be used to automatically register your
