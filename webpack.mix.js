@@ -23,5 +23,8 @@ mix.js('resources/js/app.js', 'public/js')
         "resources/views/**/*.blade.php",
         "app/Http/Controllers/*.php",
         "routes/web.php",
+        "resources/*",
+        "resources/*/*",
+        "resources/*/*/*",
     ],
 });
