@@ -5,6 +5,10 @@
 
         <show-question v-else :data="question"
         ></show-question>
+        <v-container>
+            <replies :question="question"></replies>
+            <new-reply :question-slug="question.slug"></new-reply>
+        </v-container>
 
     </div>
 
@@ -13,10 +17,12 @@
 <script>
 import ShowQuestion from "./ShowQuestion";
 import EditQuestion from "./EditQuestion";
+import Replies from "../reply/Replies";
+import NewReply from "../reply/newReply";
 
 export default {
     name: "Read",
-    components: {EditQuestion, ShowQuestion},
+    components: {NewReply, Replies, EditQuestion, ShowQuestion},
     created() {
         this.listen()
         this.getQuestion()

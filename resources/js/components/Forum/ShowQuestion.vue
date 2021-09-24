@@ -11,8 +11,8 @@
                     </v-card-subtitle>
                 </div>
                 <v-spacer></v-spacer>
-                <v-btn color="teal">
-                    replies
+                <v-btn color="teal" dark>
+                   {{ data.replies_count}}  replies
                 </v-btn>
             </v-card-title>
             <v-card-text v-html="data.body"></v-card-text>
