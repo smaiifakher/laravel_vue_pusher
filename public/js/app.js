@@ -2285,6 +2285,26 @@ __webpack_require__.r(__webpack_exports__);
         body: null
       }
     };
+  },
+  props: ['data'],
+  mounted: function mounted() {
+    this.form = this.data;
+  },
+  methods: {
+    cancel: function cancel() {
+      EventBus.$emit('cancelEditing');
+    },
+    update: function update() {
+      var _this = this;
+
+      axios.patch("/api/question/".concat(this.form.slug), this.form).then(function (res) {
+        _this.cancel();
+      })["catch"](function (error) {
+        console.log(_this.form);
+        console.log(error.response.data);
+        _this.errors = error.response.data;
+      });
+    }
   }
 });
 
@@ -2418,6 +2438,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2442,6 +2463,9 @@ __webpack_require__.r(__webpack_exports__);
 
       EventBus.$on('startEditing', function () {
         _this.editing = true;
+      });
+      EventBus.$on('cancelEditing', function () {
+        _this.editing = false;
       });
     },
     getQuestion: function getQuestion() {
@@ -58598,6 +58622,14 @@ var render = function() {
     [
       _c(
         "v-form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.update.apply(null, arguments)
+            }
+          }
+        },
         [
           _c("v-text-field", {
             attrs: { label: "Title", type: "text", required: "" },
@@ -58607,23 +58639,6 @@ var render = function() {
                 _vm.$set(_vm.form, "title", $$v)
               },
               expression: "form.title"
-            }
-          }),
-          _vm._v(" "),
-          _c("v-select", {
-            attrs: {
-              items: _vm.categories,
-              "item-text": "name",
-              "item-value": "id",
-              label: "Category",
-              autocomplete: ""
-            },
-            model: {
-              value: _vm.form.category_id,
-              callback: function($$v) {
-                _vm.$set(_vm.form, "category_id", $$v)
-              },
-              expression: "form.category_id"
             }
           }),
           _vm._v(" "),
@@ -58642,12 +58657,20 @@ var render = function() {
             [
               _c(
                 "v-btn",
-                { attrs: { color: "teal" } },
+                { attrs: { color: "teal", type: "submit" } },
                 [_c("v-icon", [_vm._v("save")])],
                 1
               ),
               _vm._v(" "),
-              _c("v-btn", [_c("v-icon", [_vm._v("delete")])], 1)
+              _c(
+                "v-btn",
+                [
+                  _c("v-icon", { on: { click: _vm.cancel } }, [
+                    _vm._v("delete")
+                  ])
+                ],
+                1
+              )
             ],
             1
           )
@@ -58807,23 +58830,17 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm.editing
-        ? _c("edit-question")
-        : _c(
-            "div",
-            [
-              _vm.question
-                ? _c("show-question", { attrs: { data: this.question } })
-                : _vm._e()
-            ],
-            1
-          )
-    ],
-    1
-  )
+  return _vm.question
+    ? _c(
+        "div",
+        [
+          _vm.editing
+            ? _c("edit-question", { attrs: { data: _vm.question } })
+            : _c("show-question", { attrs: { data: _vm.question } })
+        ],
+        1
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -119974,7 +119991,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_vue__;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"_from":"axios@^0.21","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"axios@^0.21","name":"axios","escapedName":"axios","rawSpec":"^0.21","saveSpec":null,"fetchSpec":"^0.21"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_shasum":"c67b90dc0568e5c1cf2b0b858c43ba28e2eda575","_spec":"axios@^0.21","_where":"C:\\\\wamp64\\\\www\\\\laravel_vue_pusher","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"deprecated":false,"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
+module.exports = JSON.parse('{"_args":[["axios@0.21.4","C:\\\\xampp\\\\htdocs\\\\laravel_vue_pusher"]],"_development":true,"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"C:\\\\xampp\\\\htdocs\\\\laravel_vue_pusher","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
 
 /***/ })
 

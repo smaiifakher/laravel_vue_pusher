@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-form>
+        <v-form @submit.prevent="update">
             <v-text-field
                 v-model="form.title"
                 label="Title"
@@ -8,26 +8,26 @@
                 required
             ></v-text-field>
 
-            <v-select :items="categories"
-                      v-model="form.category_id"
-                      item-text="name"
-                      item-value="id"
-                      label="Category"
-                      autocomplete
-            ></v-select>
+            <!--            <v-select :items="categories"-->
+            <!--                      v-model="form.category_id"-->
+            <!--                      item-text="name"-->
+            <!--                      item-value="id"-->
+            <!--                      label="Category"-->
+            <!--                      autocomplete-->
+            <!--            ></v-select>-->
 
             <vue-simplemde v-model="form.body"></vue-simplemde>
             <v-card-actions>
 
                 <v-btn
-                    color="teal"
+                    color="teal" type="submit"
                 >
                     <v-icon>save</v-icon>
                 </v-btn>
 
                 <v-btn
                 >
-                    <v-icon>delete</v-icon>
+                    <v-icon @click="cancel">delete</v-icon>
                 </v-btn>
             </v-card-actions>
 
@@ -47,6 +47,28 @@ export default {
                 body: null,
             }
         }
+    },
+    props: ['data'],
+    mounted() {
+        this.form = this.data
+    },
+    methods: {
+        cancel() {
+            EventBus.$emit('cancelEditing')
+        },
+
+        update() {
+            axios.patch(`/api/question/${this.form.slug}`, this.form)
+                .then(res => {
+                    this.cancel()
+                }).catch(error => {
+                    console.log(this.form)
+                console.log(error.response.data)
+                this.errors = error.response.data
+            })
+        }
+
+
     }
 }
 </script>
