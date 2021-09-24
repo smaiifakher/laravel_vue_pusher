@@ -57,7 +57,7 @@ class CategoryController extends Controller
         $category->slug = str_slug($request->name);
         $category->save();
 
-        return response('created', ResponseAlias::HTTP_CREATED);
+        return response(new CategoryResource($category), ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -83,7 +83,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      *
      * @param Request $request
      * @param Category $category
@@ -95,7 +95,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'slug' => str_slug($request->name)
         ]);
-        return \response('updated', ResponseAlias::HTTP_ACCEPTED);
+        return \response(new CategoryResource($category), ResponseAlias::HTTP_ACCEPTED);
     }
 
     /**

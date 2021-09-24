@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto" max-width="344">
+    <v-card class="mx-auto mt-2" max-width="344">
 
         <v-card-title class="headline mb-0">
             <div>
